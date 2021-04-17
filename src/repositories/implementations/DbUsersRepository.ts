@@ -18,7 +18,6 @@ export class DbUsersRepository implements IUserRepository {
 
   async delete(id: string): Promise<void>{
 
-    console.log({id})
     await User.findByIdAndRemove(id);
   };
 
@@ -31,5 +30,17 @@ export class DbUsersRepository implements IUserRepository {
 
 
     return users
+  }
+
+  async update(id: string, data: IUser): Promise<IUser>{
+
+    const updateUser = await User.findByIdAndUpdate(
+      {_id: id},
+      data,
+      {new: true} 
+    );
+
+    return updateUser;
+
   }
 };
