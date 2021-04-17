@@ -1,24 +1,35 @@
-import { User } from '../../entities/User';
+import { IUser } from '../../entities/IUser';
+import User from '../../entities/User';
 import { IUserRepository } from '../IUsersRepository';
 
 export class DbUsersRepository implements IUserRepository {
 
-  users: User[] = [];
 
-  async findByEmail(email: string): Promise<User>{
-    const user = this.users.find(user => user.email === email);
+  async findByEmail(email: string): Promise<IUser>{
+    const user = await User.findOne({email});
 
     return user;
   };
 
-  async save(user: User): Promise<void>{
-    this.users.push(user);
+  async save(user: IUser): Promise<void>{
+    await User.create(user);
+
   };
 
   async delete(id: string): Promise<void>{
 
-    const user = this.users.filter(user => user.id !== id);
-
-    this.users = user;
+    console.log({id})
+    await User.findByIdAndRemove(id);
   };
+
+  async findAll(): Promise<IUser[]>{
+
+
+    const users = await User.find();
+
+    console.log(users);
+
+
+    return users
+  }
 };

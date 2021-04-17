@@ -1,17 +1,24 @@
-import { uuid } from 'uuidv4';
+import mongoose from 'mongoose';
+import { IUser } from './IUser';
 
-export class User {
-  public readonly id: string;
 
-  public name: string;
-  public email: string;
-  public password: string;
+const Schema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  }
+}, {
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+});
 
-  constructor(props: Omit<User, 'id'>, id?: string){
-    Object.assign(this, props);
+export default mongoose.model<IUser>('User', Schema);
 
-    if(!id){
-      this.id = uuid();
-    }
-  };
-};
